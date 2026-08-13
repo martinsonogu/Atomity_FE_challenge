@@ -1,5 +1,4 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { useState } from "react";
 import { useCostData } from "../hooks/useCostData";
 import { useDrillPath } from "../hooks/useDrillPath";
 import { useOnceInView } from "../hooks/useOnceInView";
