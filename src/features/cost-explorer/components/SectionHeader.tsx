@@ -1,6 +1,7 @@
 import { Badge } from "./Badge";
 import { Breadcrumb } from "./Breadcrumb";
 import { ThemeToggle } from "./ThemeToggle";
+import { TimeFilterPill, type TimeRange } from "./TimeFilterPill";
 import type { Crumb } from "../hooks/useDrillPath";
 
 interface SectionHeaderProps {
@@ -8,6 +9,8 @@ interface SectionHeaderProps {
   onNavigate: (id: string | "root") => void;
   reducedMotion: boolean;
   aggregatedByLabel: string;
+  timeRange: TimeRange;
+  onTimeRangeChange: (value: TimeRange) => void;
 }
 
 export function SectionHeader({
@@ -15,6 +18,8 @@ export function SectionHeader({
   onNavigate,
   reducedMotion,
   aggregatedByLabel,
+  timeRange,
+  onTimeRangeChange,
 }: SectionHeaderProps) {
   return (
     <header className="flex flex-col gap-6">
@@ -32,6 +37,7 @@ export function SectionHeader({
         <Breadcrumb crumbs={crumbs} onNavigate={onNavigate} reducedMotion={reducedMotion} />
 
         <div className="flex items-center gap-2">
+          <TimeFilterPill value={timeRange} onChange={onTimeRangeChange} />
           <Badge tone="accent">
             Aggregated by: <strong className="font-semibold">{aggregatedByLabel}</strong>
           </Badge>

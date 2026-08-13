@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
 import { useCostData } from "../hooks/useCostData";
 import { useDrillPath } from "../hooks/useDrillPath";
 import { useOnceInView } from "../hooks/useOnceInView";
@@ -7,6 +8,7 @@ import { DataTable } from "./DataTable";
 import { ErrorState } from "./ErrorState";
 import { LoadingState } from "./LoadingState";
 import { SectionHeader } from "./SectionHeader";
+import type { TimeRange } from "./TimeFilterPill";
 
 const AGGREGATED_LABEL: Record<"cluster" | "namespace" | "resource", string> = {
   cluster: "Cluster",
@@ -22,8 +24,9 @@ const PANEL_ANIMATION = {
 export function CostExplorerSection() {
   const { ref: sectionRef, isInView } = useOnceInView<HTMLElement>();
   const reducedMotion = Boolean(useReducedMotion());
+  const [timeRange, setTimeRange] = useState<TimeRange>("Last 30 Days");
 
-  const { tree, isLoading, isError, error, refetch } = useCostData(isInView);
+  const { tree, isLoading, isError, error, refetch } = useCostData(isInView, timeRange);
   const { level, currentNodes, crumbs, drillInto, goToCrumb } = useDrillPath(tree);
   const isLeafLevel = level === "resource";
   const showBarChart = !(isLeafLevel && currentNodes.length <= 1);
@@ -49,6 +52,8 @@ export function CostExplorerSection() {
           onNavigate={goToCrumb}
           reducedMotion={reducedMotion}
           aggregatedByLabel={aggregatedByLabel}
+          timeRange={timeRange}
+          onTimeRangeChange={setTimeRange}
         />
 
         <div className="mt-10">
