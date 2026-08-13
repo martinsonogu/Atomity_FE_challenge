@@ -1,27 +1,120 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ---------------------------------------------------------------------- */
+/* Design tokens — single source of truth. Components reference these     */
+/* via Tailwind theme keys or var(--...) directly. Never hardcode hex.    */
+/* ---------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  /* Surfaces */
+  --color-bg-primary: #0a0e17;
+  --color-bg-surface: #121828;
+  --color-bg-surface-raised: #1a2236;
+  --color-border-subtle: #232c42;
+  --color-border-strong: #35415c;
+
+  /* Text */
+  --color-text-primary: #eef1f8;
+  --color-text-secondary: #9aa5bd;
+  --color-text-tertiary: #808aa3; /* WCAG AA: 4.99:1 against --color-bg-surface */
+
+  /* Accents — "burn spectrum": cool = efficient spend, hot = intense spend */
+  --color-accent-primary: #7c9aff;
+  --color-accent-cool: #34d6c4;
+  --color-accent-hot: #ff9d54;
+  --color-accent-success: #43d17a;
+  --color-accent-error: #ff6b6b;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  /* Shadows */
+  --shadow-panel: 0 30px 80px -30px rgba(0, 0, 0, 0.65);
+  --shadow-bar: 0 12px 24px -12px rgba(124, 154, 255, 0.35);
+
+  /* Fonts */
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Light theme override — toggled via [data-theme="light"] on <html> */
+[data-theme="light"] {
+  color-scheme: light;
+  --color-bg-primary: #f4f6fb;
+  --color-bg-surface: #ffffff;
+  --color-bg-surface-raised: #ffffff;
+  --color-border-subtle: #e1e6f0;
+  --color-border-strong: #c7cee0;
+
+  --color-text-primary: #10131c;
+  --color-text-secondary: #4b5471;
+  --color-text-tertiary: #5a6478; /* WCAG AA: 5.95:1 against --color-bg-surface */
+
+  --shadow-panel: 0 30px 80px -35px rgba(20, 30, 60, 0.25);
+  --shadow-bar: 0 12px 24px -14px rgba(80, 110, 220, 0.28);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent-primary) 35%, transparent);
+}
+
+/* Reduced-motion fallback for CSS animations and transitions. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* Focus visibility — keyboard users get a real ring everywhere. */
+:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+/* Tabular numerals everywhere costs are rendered so digits don't jitter */
+/* horizontally while count-up animations run.                          */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Bar spacing based on the chart container width. */
+@container bar-chart (max-width: 560px) {
+  .bar-row {
+    gap: 0.75rem;
+  }
+}
+
+@container bar-chart (max-width: 380px) {
+  .bar-row {
+    gap: 0.4rem;
   }
 }

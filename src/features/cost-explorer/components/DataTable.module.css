@@ -1,0 +1,116 @@
+.tableWrap {
+  container-type: inline-size;
+  container-name: cost-table;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 0.65rem + 0.3vw, 0.875rem);
+
+  & caption {
+    text-align: start;
+    padding-block-end: 0.5rem;
+  }
+
+  & thead th {
+    text-align: end;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+    padding-block: 0.75rem;
+    padding-inline: 0.75rem;
+    border-block-end: 1px solid var(--color-border-subtle);
+    white-space: nowrap;
+  }
+
+  & thead th:first-child {
+    text-align: start;
+  }
+
+  & tbody td {
+    text-align: end;
+    padding-block: 0.85rem;
+    padding-inline: 0.75rem;
+    border-block-end: 1px solid var(--color-border-subtle);
+    color: var(--color-text-secondary);
+  }
+
+  & tbody td:first-child {
+    text-align: start;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-weight: 500;
+  }
+
+  & tbody td.total {
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+
+  & tbody tr {
+    cursor: var(--row-cursor, default);
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+  }
+
+  & tbody tr:hover,
+  & tbody tr:focus-within {
+    background-color: color-mix(in srgb, var(--color-accent-primary) 8%, transparent);
+  }
+
+  /* Parent-aware dimming: once *any* row is hovered, mute its unhovered
+     siblings so the highlighted row reads clearly. */
+  &:has(tbody tr:hover) tbody tr:not(:hover) {
+    opacity: 0.55;
+  }
+}
+
+.zeroValue {
+  color: var(--color-text-tertiary);
+}
+
+/* Narrow container: reflow the table into stacked label/value cards. */
+@container cost-table (max-width: 640px) {
+  .table {
+    & thead {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    & tbody,
+    & tr {
+      display: block;
+      width: 100%;
+    }
+
+    & tbody tr {
+      margin-block-end: 0.75rem;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 1rem;
+    }
+
+    & tbody td {
+      display: flex;
+      justify-content: space-between;
+      border-block-end: none;
+      padding-inline: 0;
+      padding-block: 0.3rem;
+    }
+
+    & tbody td::before {
+      content: attr(data-label);
+      color: var(--color-text-tertiary);
+      font-family: var(--font-body);
+    }
+
+    & tbody td:first-child::before {
+      content: none;
+    }
+  }
+}
